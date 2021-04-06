@@ -1,0 +1,625 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <time.h>
+
+void printarr(char arr[50][120]); 
+
+void init_rest(char arr[50][120])
+{
+   for (int i=0;i<50;i++)
+  {
+   printf("\n");
+   for(int j=0;j<120;j++)
+   {
+    if(i==0||i==49) arr[i][j]='-';
+    else if(j==0||j==119) arr[i][j]='|';
+    else arr[i][j]=' ';
+
+    printf("%c",arr[i][j]);
+   } 
+  }
+}
+
+void printarr(char arr[50][120])
+{
+    int i,j;
+    system("cls");
+    for (i=0;i<50;i++)
+    {
+        printf("\n");
+        for(j=0;j<120;j++)
+        {
+            printf("%c", arr[i][j]);
+        }
+    }
+}
+
+int main()
+{
+  int brmeat,brvegies,brfish;
+  int x,y;
+  int brm=0,brv=0,brf=0;
+  char arr[50][120];
+
+  init_rest(arr);
+  printarr(arr);
+
+  do{
+  printf("\nHow many portions with meat didn't you eat yesterday?");
+  scanf("%d",&brmeat);
+  }while(brmeat<1||brmeat>1000);
+
+  do{
+  printf("\nHow many portions with vegies didn't you eat yesterday?");
+  scanf("%d",&brvegies);
+  }while(brvegies<1||brvegies>1000);
+
+  do{
+    printf("\nHow many portions with fish didn't you eat yesterday?");
+    scanf("%d",&brfish);
+  }while(brfish<1||brfish>1000);
+
+  Saver(arr);
+  printarr(arr);
+
+  for(int a=0;a<brmeat;a++)
+  {
+    randmeat(y,x,arr);
+    printarr(arr);
+  }
+
+  for(int a=0;a<brvegies;a++)
+  {
+    randveg(x,y,arr);
+    printarr(arr);
+  }
+
+  arr[12][30]='X';
+  arr[14][30]='X';
+  arr[16][30]='X';
+
+  do
+  {
+
+  }while();
+
+  return 0;
+}
+
+int randmeat(int y,int x, char arr[50][120])
+{
+    srand(time(NULL));
+    do{
+    x=rand()%117+1;
+    y=rand()%47+1;
+    }while(arr[y][x]=='m'||arr[25][60]!=' ');
+    arr[y][x]='m';
+}
+
+int randveg(int x,int y, char arr[50][120])
+{
+  srand(time(NULL));
+    do{
+    x=rand()%117+1;
+    y=rand()%47+1;
+    }while(arr[y][x]=='m'|| arr[y][x]=='v'||arr[25][60]!=' ');
+    arr[y][x]='v';
+}
+
+int randfish(int x, int y, char arr[50][120])
+{
+  srand(time(NULL));
+  do{
+    x=rand()%117+1;
+    y=rand()%47+1;
+  }while(arr[y][x]=='m'||arr[y][x]=='v'||arr[y][x]=='f'||arr[25][60]!=' ');
+}
+
+int Saver(char arr[25][60])
+{
+    arr[25][60]='O';
+    printf("\n");
+}
+
+int randneeds(int wish,char arr[50][120])
+{
+  srand(time(NULL));
+    wish=rand()%3+1;
+    return wish;
+}
+
+int Movemeat(int i, int j, int brm,char arr[50][120])
+{
+    char posoka;
+    char left = 'a';
+    char right = 'd';
+    char up = 'w';
+    char down = 's';
+
+    char leftD = '1';
+    char rightD = '2';
+    char upD = '3';
+    char downD = '4';
+    posoka=getchar();
+    do{
+    printf("\nYour Direction(1=10x left;2=10x right; 3=10x up; 4=10x down)\n a=1x left; d=1x right; w=1x up; s=1x down: ");
+    }while(posoka!='1'||posoka!='2'||posoka!='3'||posoka!='4'||posoka!='a'||posoka!='s'||posoka!='d'||posoka!='w');
+    i=FindI(arr);
+    j=FindJ(arr);
+
+    if(posoka==leftD)
+    {
+            if (arr[i][j-10]=='X'||arr[i][j-10]=='m'||arr[i][j-10]=='v'||arr[i][j-10]=='f') arr[i][j-1]='O';
+            else {
+            arr[i][j-10]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==rightD)
+    {
+            if (arr[i][j+10]=='X'||arr[i][j+10]=='m'||arr[i][j+10]=='v'||arr[i][j+10]=='f') arr[i][j+1]='O';
+            else {
+            arr[i][j+10]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==upD)
+    {
+            if (arr[i-10][j]=='X'||arr[i-10][j]=='m'||arr[i-10][j]=='v'||arr[i-10][j]=='f') arr[i-1][j]='O';
+            else {
+            arr[i-10][j]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==downD)
+    {
+            if (arr[i-10][j]=='X'||arr[i-10][j]=='m'||arr[i-10][j]=='v'||arr[i-10][j]=='f') arr[i-1][j]='O';
+            else {
+            arr[i-10][j]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+
+    if(posoka==left)
+    {
+      if(arr[i][j-1]=='m')
+      {
+        printf("You collected thrown meat portion!");
+        delay(2);
+        arr[i][j-1]='x';
+        brm++;
+      }
+
+      if(arr[i][j-1]=='x'&&brm>=1)
+      {
+        printf("You have already taken this thrown meat portion");
+        delay(2);
+        arr[i][j]='O';
+      }
+      
+      if(arr[i][j-1]==' ')
+      {
+        arr[i][j-1]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==right)
+    {
+      if(arr[i][j+1]=='m')
+      {
+        printf("You collected thrown meat portion!");
+        delay(2);
+        arr[i][j+1]='x';
+        brm++;
+      }
+
+      if(arr[i][j+1]=='x'&&brm>=1)
+      {
+        printf("You have already taken this thrown meat portion");
+        delay(2);
+        arr[i][j]='O';
+      }
+      
+      if(arr[i][j+1]==' ')
+      {
+        arr[i][j-1]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==up)
+    {
+      if(arr[i-1][j]=='m')
+      {
+        printf("You collected thrown meat portion!");
+        delay(2);
+        arr[i-1][j]='x';
+        brm++;
+      }
+
+      if(arr[i-1][j]=='x'&&brm>=1)
+      {
+        printf("You have already taken this thrown meat portion");
+        delay(2);
+        arr[i-1][j]='O';
+      }
+      
+      if(arr[i-1][j]==' ')
+      {
+        arr[i-1][j]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==down)
+    {
+      if(arr[i+1][j]=='m')
+      {
+        printf("You collected thrown meat portion!");
+        delay(2);
+        arr[i+1][j]='x';
+        brm++;
+      }
+
+      if(arr[i+1][j]=='x'&&brm>=1)
+      {
+        printf("You have already taken this thrown meat portion");
+        delay(2);
+        arr[i+1][j]='O';
+      }
+      
+      if(arr[i+1][j]==' ')
+      {
+        arr[i+1][j]='O';
+        arr[i][j]=' ';
+      }
+    }
+}
+
+int Moveveg(int i, int j, int brv,char arr[50][120])
+{
+    char posoka;
+    char left='a';
+    char right='d';
+    char up='w';
+    char down='s';
+
+    char leftD='1';
+    char rightD='2';
+    char upD='3';
+    char downD='4';
+    posoka=getchar();
+    do{
+    printf("\nYour Direction(1=10x left;2=10x right; 3=10x up; 4=10x down)\n a=1x left; d=1x right; w=1x up; s=1x down: ");
+    }while(posoka!='1'||posoka!='2'||posoka!='3'||posoka!='4'||posoka!='a'||posoka!='s'||posoka!='d'||posoka!='w');
+    i=FindI(arr);
+    j=FindJ(arr);
+
+    if(posoka==leftD)
+    {
+            if (arr[i][j-10]=='X'||arr[i][j-10]=='m'||arr[i][j-10]=='v'||arr[i][j-10]=='f'||arr[i][j-10]=='x') arr[i][j-1]='O';
+            else {
+            arr[i][j-10]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==rightD)
+    {
+            if (arr[i][j+10]=='X'||arr[i][j+10]=='m'||arr[i][j+10]=='v'||arr[i][j+10]=='f'||arr[i][j+10]=='x') arr[i][j+1]='O';
+            else {
+            arr[i][j+10]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==upD)
+    {
+            if (arr[i-10][j]=='X'||arr[i-10][j]=='m'||arr[i-10][j]=='v'||arr[i-10][j]=='f'||arr[i-10][j]=='x') arr[i-1][j]='O';
+            else {
+            arr[i-10][j]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==downD)
+    {
+            if (arr[i-10][j]=='X'||arr[i-10][j]=='m'||arr[i-10][j]=='v'||arr[i-10][j]=='f'||arr[i-10][j]=='x') arr[i-1][j]='O';
+            else {
+            arr[i-10][j]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==left)
+    {
+      if(arr[i][j-1]=='v')
+      {
+        printf("You collected thrown veggie portion!");
+        delay(2);
+        arr[i][j-1]='x';
+        brv++;
+      }
+
+      if(arr[i][j-1]=='x'&&brv>=1)
+      {
+        printf("You have already taken this thrown veggie portion");
+        delay(2);
+        arr[i][j]='O';
+      }
+      
+      if(arr[i][j-1]==' ')
+      {
+        arr[i][j-1]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==right)
+    {
+      if(arr[i][j+1]=='v')
+      {
+        printf("You collected thrown veggie portion!");
+        delay(2);
+        arr[i][j+1]='x';
+        brv++;
+      }
+
+      if(arr[i][j+1]=='x'&&brv>=1)
+      {
+        printf("You have already taken this thrown veggie portion");
+        delay(2);
+        arr[i][j]='O';
+      }
+      
+      if(arr[i][j+1]==' ')
+      {
+        arr[i][j-1]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==up)
+    {
+      if(arr[i-1][j]=='v')
+      {
+        printf("You collected thrown veggie portion!");
+        delay(2);
+        arr[i-1][j]='x';
+        brv++;
+      }
+
+      if(arr[i-1][j]=='x'&&brv>=1)
+      {
+        printf("You have already taken this thrown veggie portion");
+        delay(2);
+        arr[i-1][j]='O';
+      }
+      
+      if(arr[i-1][j]==' ')
+      {
+        arr[i-1][j]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==down)
+    {
+      if(arr[i+1][j]=='v')
+      {
+        printf("You collected thrown veggie portion!");
+        delay(2);
+        arr[i+1][j]='x';
+        brv++;
+      }
+
+      if(arr[i+1][j]=='x'&&brv>=1)
+      {
+        printf("You have already taken this thrown veggie portion");
+        delay(2);
+        arr[i+1][j]='O';
+      }
+      
+      if(arr[i+1][j]==' ')
+      {
+        arr[i+1][j]='O';
+        arr[i][j]=' ';
+      }
+    }
+}
+
+int Movefish(int i, int j, int brf,char arr[50][120])
+{
+    char posoka;
+    char left='a';
+    char right='d';
+    char up='w';
+    char down='s';
+
+    char leftD='1';
+    char rightD='2';
+    char upD='3';
+    char downD='4';
+    posoka=getchar();
+    do{
+    printf("\nYour Direction(1=10x left;2=10x right; 3=10x up; 4=10x down)\n a=1x left; d=1x right; w=1x up; s=1x down: ");
+    }while(posoka!='1'||posoka!='2'||posoka!='3'||posoka!='4'||posoka!='a'||posoka!='s'||posoka!='d'||posoka!='w');
+    i=FindI(arr);
+    j=FindJ(arr);
+
+    if(posoka==leftD)
+    {
+            if (arr[i][j-10]=='X'||arr[i][j-10]=='m'||arr[i][j-10]=='v'||arr[i][j-10]=='f'||arr[i][j-10]=='x') arr[i][j-1]='O';
+            else {
+            arr[i][j-10]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==rightD)
+    {
+            if (arr[i][j+10]=='X'||arr[i][j+10]=='m'||arr[i][j+10]=='v'||arr[i][j+10]=='f'||arr[i][j+10]=='x') arr[i][j+1]='O';
+            else {
+            arr[i][j+10]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==upD)
+    {
+            if (arr[i-10][j]=='X'||arr[i-10][j]=='m'||arr[i-10][j]=='v'||arr[i-10][j]=='f'||arr[i-10][j]=='x') arr[i-1][j]='O';
+            else {
+            arr[i-10][j]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+    if(posoka==downD)
+    {
+            if (arr[i-10][j]=='X'||arr[i-10][j]=='m'||arr[i-10][j]=='v'||arr[i-10][j]=='f'||arr[i-10][j]=='x') arr[i-1][j]='O';
+            else {
+            arr[i-10][j]='O';
+            arr[i][j]=' ';
+            }
+    }
+
+
+    if(posoka==left)
+    {
+      if(arr[i][j-1]=='f')
+      {
+        printf("You collected thrown fish portion!");
+        delay(2);
+        arr[i][j-1]='x';
+        brf++;
+      }
+
+      if(arr[i][j-1]=='x'&&brf>=1)
+      {
+        printf("You have already taken this thrown fish portion");
+        delay(2);
+        arr[i][j]='O';
+      }
+      
+      if(arr[i][j-1]==' ')
+      {
+        arr[i][j-1]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==right)
+    {
+      if(arr[i][j+1]=='f')
+      {
+        printf("You collected thrown fish portion!");
+        delay(2);
+        arr[i][j+1]='x';
+        brf++;
+      }
+
+      if(arr[i][j+1]=='x'&&brf>=1)
+      {
+        printf("You have already taken this thrown fish portion");
+        delay(2);
+        arr[i][j]='O';
+      }
+      
+      if(arr[i][j+1]==' ')
+      {
+        arr[i][j-1]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==up)
+    {
+      if(arr[i-1][j]=='f')
+      {
+        printf("You collected thrown fish portion!");
+        delay(2);
+        arr[i-1][j]='x';
+        brf++;
+      }
+
+      if(arr[i-1][j]=='x'&&brf>=1)
+      {
+        printf("You have already taken this thrown fish portion");
+        delay(2);
+        arr[i-1][j]='O';
+      }
+      
+      if(arr[i-1][j]==' ')
+      {
+        arr[i-1][j]='O';
+        arr[i][j]=' ';
+      }
+    }
+
+    if(posoka==down)
+    {
+      if(arr[i+1][j]=='f')
+      {
+        printf("You collected thrown fish portion!");
+        delay(2);
+        arr[i+1][j]='x';
+        brf++;
+      }
+
+      if(arr[i+1][j]=='x'&&brf>=1)
+      {
+        printf("You have already taken this thrown fish portion");
+        delay(2);
+        arr[i+1][j]='O';
+      }
+      
+      if(arr[i+1][j]==' ')
+      {
+        arr[i+1][j]='O';
+        arr[i][j]=' ';
+      }
+    }
+}
+
+int FindOX(char arr[50][120])
+{
+  for(int i=0;i<49;i++)
+  {
+    for(int j=0;j<119;j++)
+    {
+      if(arr[i][j]=='O')
+      {
+        return i;
+        break;
+      }
+    }
+  }
+}
+
+int FindY(char arr[50][120])
+{
+  for(int i=0;i<49;i++)
+  {
+    for(int j=0;j<119;j++)
+    {
+      if(arr[i][j]=='O')
+      {
+        return j;
+        break;
+      }
+    }
+  }
+}
+
+void delay(int number_of_seconds)
+{
+    int milli_seconds = 1000 * number_of_seconds;
+    clock_t start_time = clock();
+    while (clock() < start_time + milli_seconds);
+}
